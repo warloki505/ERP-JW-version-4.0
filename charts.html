@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP Financeiro JW v3.0 - Relatório Completo</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <header class="topbar no-print">
+    <div class="container topbar__row">
+      <h1>💰 ERP Financeiro JW v3.0 - Relatórios</h1>
+      <div class="topbar__actions">
+        <button onclick="location.href='dashboard.html'" class="btn btn--ghost">← Dashboard</button>
+        <button id="logoutBtn" class="btn btn--ghost">🚪 Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="margin-top: 24px;">
+    
+    <!-- CABEÇALHO -->
+    <section class="card">
+      <div style="text-align: center;">
+        <h1>📊 RELATÓRIO FINANCEIRO COMPLETO</h1>
+        <h2 style="color: var(--primary); margin: 8px 0;" id="monthLabel"></h2>
+        <p class="text-muted">Gerado em: <span id="dataGeracao"></span></p>
+      </div>
+    </section>
+
+    <!-- RESUMO DOS 6 KPIs -->
+    <section class="card">
+      <h2>💹 RESUMO EXECUTIVO - TODOS OS INDICADORES</h2>
+      <div class="kpi-grid">
+        <div class="kpi kpi--receita">
+          <div class="kpi__title">💵 Renda Total</div>
+          <div class="kpi__value" id="kpiRenda">R$ 0,00</div>
+        </div>
+        <div class="kpi kpi--poupanca">
+          <div class="kpi__title">🏦 Poupança</div>
+          <div class="kpi__value" id="kpiPoupanca">R$ 0,00</div>
+        </div>
+        <div class="kpi kpi--essenciais">
+          <div class="kpi__title">🔴 Essenciais</div>
+          <div class="kpi__value" id="kpiEssenciais">R$ 0,00</div>
+        </div>
+        <div class="kpi kpi--livres">
+          <div class="kpi__title">🟢 Livres</div>
+          <div class="kpi__value" id="kpiLivres">R$ 0,00</div>
+        </div>
+        <div class="kpi kpi--dividas">
+          <div class="kpi__title">💳 DÍVIDAS</div>
+          <div class="kpi__value" id="kpiDividas">R$ 0,00</div>
+          <small>⚠️ Priorize</small>
+        </div>
+        <div class="kpi kpi--highlight">
+          <div class="kpi__title">💎 Saldo</div>
+          <div class="kpi__value" id="kpiSaldo">R$ 0,00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANÁLISE PERCENTUAL -->
+    <section class="card">
+      <h2>📈 TAXAS E PERCENTUAIS</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+        <div style="padding: 12px; border: 1px solid var(--success); border-radius: 8px; background: var(--success-light);">
+          <div style="font-size: 11px; color: var(--success); font-weight: 600; margin-bottom: 4px;">Taxa de Poupança</div>
+          <div id="percPoupanca" style="font-size: 24px; font-weight: 800; color: var(--success);">0%</div>
+        </div>
+        <div style="padding: 12px; border: 1px solid #ea580c; border-radius: 8px; background: #fed7aa;">
+          <div style="font-size: 11px; color: #ea580c; font-weight: 600; margin-bottom: 4px;">Taxa de Essenciais</div>
+          <div id="percEssenciais" style="font-size: 24px; font-weight: 800; color: #ea580c;">0%</div>
+        </div>
+        <div style="padding: 12px; border: 1px solid #d97706; border-radius: 8px; background: #fef3c7;">
+          <div style="font-size: 11px; color: #d97706; font-weight: 600; margin-bottom: 4px;">Taxa de Livres</div>
+          <div id="percLivres" style="font-size: 24px; font-weight: 800; color: #d97706;">0%</div>
+        </div>
+        <div style="padding: 12px; border: 2px solid var(--divida); border-radius: 8px; background: var(--divida-light);">
+          <div style="font-size: 11px; color: var(--divida); font-weight: 700; margin-bottom: 4px;">⚠️ Endividamento</div>
+          <div id="percDividas" style="font-size: 24px; font-weight: 900; color: var(--divida);">0%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRÁFICOS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
+      <section class="card">
+        <h3>📊 Distribuição do Orçamento (6 categorias)</h3>
+        <canvas id="chartPizza"></canvas>
+      </section>
+      <section class="card">
+        <h3>📊 Comparativo Geral</h3>
+        <canvas id="chartBarras"></canvas>
+      </section>
+    </div>
+
+    <section class="card">
+      <h3>💳 Despesas por Categoria</h3>
+      <canvas id="chartCategorias"></canvas>
+    </section>
+
+    <section class="card">
+      <h3>⚠️ Distribuição de Dívidas por Tipo</h3>
+      <canvas id="chartDividas"></canvas>
+    </section>
+
+    <section class="card">
+      <h3>📈 Evolução dos Últimos 6 Meses (com Dívidas)</h3>
+      <canvas id="chartEvolucao"></canvas>
+    </section>
+
+    <!-- TABELA -->
+    <section class="card">
+      <h2>📋 LANÇAMENTOS DO MÊS</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Valor</th></tr>
+          </thead>
+          <tbody id="tbodyLancamentos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="footer-actions no-print">
+      <button onclick="window.print()" class="btn btn--primary">🖨️ Gerar PDF</button>
+      <button onclick="location.reload()" class="btn btn--ghost">🔄 Atualizar</button>
+    </section>
+
+  </main>
+
+  <script>
+    const LOGGED_KEY = "gf_erp_logged";
+    if (localStorage.getItem(LOGGED_KEY) !== "true") window.location.href = "index.html";
+
+    function getMonthId(date = new Date()) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function getMonthLabel(monthId) {
+      const [year, month] = monthId.split('-');
+      return new Date(year, month - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    }
+
+    function brl(v) {
+      return (Number(v) || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function calcularResumo(list) {
+      let renda = 0, poupanca = 0, essenciais = 0, livres = 0, dividas = 0;
+      list.forEach((t) => {
+        const v = Number(t.valor) || 0;
+        if (t.tipo === "receita") renda += v;
+        if (t.tipo === "poupanca") poupanca += v;
+        if (t.tipo === "divida") dividas += v;
+        if (t.tipo === "despesa" && t.subtipo === "essencial") essenciais += v;
+        if (t.tipo === "despesa" && t.subtipo === "livre") livres += v;
+      });
+      return { renda, poupanca, essenciais, livres, dividas, saldo: renda - poupanca - essenciais - livres - dividas };
+    }
+
+    const activeMonth = getMonthId();
+    const tx = JSON.parse(localStorage.getItem(`gf_erp_tx_${activeMonth}`) || '[]');
+    const r = calcularResumo(tx);
+
+    document.getElementById('monthLabel').textContent = getMonthLabel(activeMonth);
+    document.getElementById('dataGeracao').textContent = new Date().toLocaleString('pt-BR');
+    document.getElementById('kpiRenda').textContent = brl(r.renda);
+    document.getElementById('kpiPoupanca').textContent = brl(r.poupanca);
+    document.getElementById('kpiEssenciais').textContent = brl(r.essenciais);
+    document.getElementById('kpiLivres').textContent = brl(r.livres);
+    document.getElementById('kpiDividas').textContent = brl(r.dividas);
+    document.getElementById('kpiSaldo').textContent = brl(r.saldo);
+
+    if (r.renda > 0) {
+      document.getElementById('percPoupanca').textContent = ((r.poupanca / r.renda) * 100).toFixed(1) + '%';
+      document.getElementById('percEssenciais').textContent = ((r.essenciais / r.renda) * 100).toFixed(1) + '%';
+      document.getElementById('percLivres').textContent = ((r.livres / r.renda) * 100).toFixed(1) + '%';
+      document.getElementById('percDividas').textContent = ((r.dividas / r.renda) * 100).toFixed(1) + '%';
+    }
+
+    const cores = { receita: '#10b981', poupanca: '#3b82f6', essenciais: '#ea580c', livres: '#d97706', dividas: '#dc2626', saldo: '#8b5cf6' };
+
+    new Chart(document.getElementById('chartPizza'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Essenciais', 'Livres', 'Poupança', '⚠️ Dívidas', 'Saldo'],
+        datasets: [{
+          data: [r.essenciais, r.livres, r.poupanca, r.dividas, Math.max(0, r.saldo)],
+          backgroundColor: [cores.essenciais, cores.livres, cores.poupanca, cores.dividas, cores.saldo],
+          borderWidth: 2, borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.label}: ${brl(ctx.parsed)} (${((ctx.parsed / r.renda) * 100).toFixed(1)}%)`
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chartBarras'), {
+      type: 'bar',
+      data: {
+        labels: ['Receitas', 'Despesas', 'Poupança', '⚠️ Dívidas'],
+        datasets: [{
+          data: [r.renda, r.essenciais + r.livres, r.poupanca, r.dividas],
+          backgroundColor: [cores.receita, cores.essenciais, cores.poupanca, cores.dividas]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { callback: (v) => brl(v) } } }
+      }
+    });
+
+    const despCat = {};
+    tx.forEach(t => { if (t.tipo === 'despesa') despCat[t.categoria] = (despCat[t.categoria] || 0) + Number(t.valor); });
+    const despSorted = Object.entries(despCat).sort((a, b) => b[1] - a[1]).slice(0, 10);
+    new Chart(document.getElementById('chartCategorias'), {
+      type: 'bar',
+      data: {
+        labels: despSorted.map(s => s[0]),
+        datasets: [{ data: despSorted.map(s => s[1]), backgroundColor: cores.essenciais }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, ticks: { callback: (v) => brl(v) } } }
+      }
+    });
+
+    const divTipo = {};
+    tx.forEach(t => { if (t.tipo === 'divida') divTipo[t.categoria] = (divTipo[t.categoria] || 0) + Number(t.valor); });
+    const divCanvas = document.getElementById('chartDividas');
+    if (Object.keys(divTipo).length > 0) {
+      new Chart(divCanvas, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(divTipo),
+          datasets: [{
+            data: Object.values(divTipo),
+            backgroundColor: ['#dc2626', '#ef4444', '#f87171', '#fca5a5', '#fecaca', '#b91c1c', '#991b1b', '#7f1d1d']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'right' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const total = Object.values(divTipo).reduce((a, b) => a + b, 0);
+                  return `${ctx.label}: ${brl(ctx.parsed)} (${((ctx.parsed / total) * 100).toFixed(1)}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    } else {
+      divCanvas.parentElement.innerHTML = '<p class="text-muted" style="text-align:center;padding:40px;">✅ Nenhuma dívida registrada</p>';
+    }
+
+    const evolucao = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(new Date().getFullYear(), new Date().getMonth() - i, 1);
+      const mId = getMonthId(d);
+      const txMes = JSON.parse(localStorage.getItem(`gf_erp_tx_${mId}`) || '[]');
+      const rMes = calcularResumo(txMes);
+      evolucao.push({
+        label: d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }),
+        renda: rMes.renda, despesas: rMes.essenciais + rMes.livres, poupanca: rMes.poupanca, dividas: rMes.dividas
+      });
+    }
+
+    new Chart(document.getElementById('chartEvolucao'), {
+      type: 'line',
+      data: {
+        labels: evolucao.map(m => m.label),
+        datasets: [
+          { label: 'Receitas', data: evolucao.map(m => m.renda), borderColor: cores.receita, backgroundColor: cores.receita + '20', tension: 0.4, fill: true, borderWidth: 3 },
+          { label: 'Despesas', data: evolucao.map(m => m.despesas), borderColor: cores.essenciais, backgroundColor: cores.essenciais + '20', tension: 0.4, fill: true, borderWidth: 3 },
+          { label: 'Poupança', data: evolucao.map(m => m.poupanca), borderColor: cores.poupanca, backgroundColor: cores.poupanca + '20', tension: 0.4, fill: true, borderWidth: 3 },
+          { label: '⚠️ Dívidas', data: evolucao.map(m => m.dividas), borderColor: cores.dividas, backgroundColor: cores.dividas + '20', tension: 0.4, fill: true, borderWidth: 3, borderDash: [5, 5] }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, ticks: { callback: (v) => brl(v) } } }
+      }
+    });
+
+    const tbody = document.getElementById('tbodyLancamentos');
+    if (tx.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;">Nenhum lançamento</td></tr>';
+    } else {
+      tx.sort((a, b) => b.data.localeCompare(a.data)).forEach(t => {
+        let tipo = t.tipo.toUpperCase();
+        if (t.tipo === 'despesa') tipo = t.subtipo === 'essencial' ? 'DESP. ESSENCIAL' : 'DESP. LIVRE';
+        tbody.innerHTML += `<tr><td>${new Date(t.data + 'T00:00:00').toLocaleDateString('pt-BR')}</td><td><span class="badge badge-${t.tipo}">${tipo}</span></td><td>${t.categoria}</td><td style="font-weight:600;">${brl(t.valor)}</td></tr>`;
+      });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm("Sair?")) { localStorage.setItem(LOGGED_KEY, "false"); window.location.href = "index.html"; }
+    });
+  </script>
+
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+      .card { page-break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+      .kpi { border: 1px solid #ddd; }
+      .kpi--dividas { border: 2px solid #dc2626 !important; }
+    }
+  </style>
+</body>
+</html>
