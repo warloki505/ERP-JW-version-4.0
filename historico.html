@@ -143,4 +143,85 @@
                   ${mesAtual ? '<span class="badge badge-poupanca" style="margin-left: 8px;">MÊS ATUAL</span>' : ''}
                 </h3>
                 <p class="text-muted" style="font-size: 13px; margin: 0;">
-                  ${tx.length
+                  ${tx.length} lançamento${tx.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; flex: 2;">
+                <div>
+                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Receitas</div>
+                  <div style="font-weight: 600; color: var(--success);">${brl(resumo.renda)}</div>
+                </div>
+                
+                <div>
+                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Despesas</div>
+                  <div style="font-weight: 600; color: var(--danger);">${brl(resumo.essenciais + resumo.livres)}</div>
+                </div>
+                
+                <div>
+                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Poupança</div>
+                  <div style="font-weight: 600; color: var(--primary);">${brl(resumo.poupanca)}</div>
+                </div>
+                
+                <div>
+                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Dívidas</div>
+                  <div style="font-weight: 600; color: var(--divida);">${brl(resumo.dividas)}</div>
+                </div>
+                
+                <div>
+                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Saldo</div>
+                  <div style="font-weight: 700;" class="${saldoClass}">${brl(resumo.saldo)}</div>
+                </div>
+              </div>
+              
+              <div style="display: flex; gap: 8px;">
+                <button onclick="verDetalhes('${monthId}')" class="btn btn--primary btn-mini">
+                  📋 Ver Detalhes
+                </button>
+                ${!mesAtual ? `
+                  <button onclick="excluirMes('${monthId}')" class="btn btn--ghost btn-mini">
+                    🗑️
+                  </button>
+                ` : ''}
+              </div>
+              
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('monthsList').innerHTML = html;
+    }
+
+    function verDetalhes(monthId) {
+      localStorage.setItem('gf_erp_selected_month', monthId);
+      window.location.href = 'dashboard.html';
+    }
+
+    function excluirMes(monthId) {
+      const label = getMonthLabel(monthId);
+      
+      if (!confirm(`⚠️ ATENÇÃO!\n\nDeseja realmente excluir TODOS os dados de ${label}?\n\nEsta ação não pode ser desfeita.`)) {
+        return;
+      }
+      
+      const txKey = `gf_erp_tx_${monthId}`;
+      localStorage.removeItem(txKey);
+      
+      alert(`✓ Dados de ${label} foram removidos`);
+      loadHistorico();
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm("Deseja realmente sair?")) {
+        localStorage.setItem(LOGGED_KEY, "false");
+        window.location.href = "index.html";
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadHistorico();
+    });
+  </script>
+</body>
+</html>
