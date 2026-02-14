@@ -1,0 +1,54 @@
+ERP FINANCEIRO JW — ANÁLISE TÉCNICA v4.1 (CURADORIA)
+Data: 2026-02-14
+
+1) CONTEXTO
+A v4.1 foi tratada como etapa de estabilização visual/arquitetural sobre a base v4.0.
+O objetivo foi corrigir regressões comuns (principalmente CSS parcial) e alinhar páginas que estavam “mistas”
+(components e perfis) SEM alterar o modelo offline-first (localStorage) e sem mudar chaves de armazenamento.
+
+2) PRINCIPAIS PROBLEMAS IDENTIFICADOS NA “v4.1 QUE QUEBROU”
+- style.css foi substituído por um trecho de patch (“ADICIONAR NO FINAL...”), removendo o Design System.
+  Resultado: UI feia/quebrada, variáveis CSS ausentes e responsividade degradada.
+- perfil.html não refletia os 5 perfis definidos em ERP_CONST.financialProfiles.
+- script.js (helpers globais) não estava integrado de forma consistente entre páginas.
+
+3) CURADORIA APLICADA NESTE PACOTE v4.1
+3.1 CSS
+- Restaurado o style.css completo (Design System) como arquivo principal.
+- Adicionadas extensões ao final do CSS (sem sobrescrever a base):
+  - suporte a tema manual via body.dark-theme (compatível com script.js)
+  - melhorias de acessibilidade (:focus)
+  - utilitários (grid, flex, spacing) e pequenos ajustes mobile
+
+3.2 PERFIS FINANCEIROS (UI)
+- Página perfil.html atualizada para:
+  - exibir 5 perfis (responsável, conservador, poupador agressivo, livre, quitador)
+  - aplicar percentuais usando a fonte de verdade: ERP_CONST.financialProfiles
+  - manter o salvamento no mesmo PERFIL_KEY (compatibilidade com dados existentes)
+
+3.3 JS (HELPERS)
+- Inclusão de js/script.js em todas as páginas (index, dashboard, perfil, histórico, charts)
+  para padronizar:
+  - gerenciamento de tema manual (sem depender apenas do prefers-color-scheme)
+  - helpers de navegação (sem obrigatoriedade de uso)
+  - auth guard adicional (não altera modelo de login existente)
+
+4) O QUE NÃO FOI ALTERADO (DE PROPÓSITO)
+- Nenhuma mudança no processo offline/localStorage.
+- Nenhuma migração de chaves (tx por mês, user, logged, cfg categorias/bancos, recorrências).
+- Dashboard.js e Config/Constantes permanecem compatíveis com v4.0.
+
+5) CHECKLIST DE TESTES (VALIDAÇÃO)
+- Login/Cadastro (index.html)
+- Acesso bloqueado quando LOGGED_KEY != true (dashboard/perfil/histórico/charts)
+- CRUD de lançamentos (receita, poupança, despesa, dívida)
+- Navegação de meses + persistência por mês
+- Modais (editar / fixar recorrência)
+- Gerenciadores de categorias e bancos no perfil
+- Charts e export PDF
+- Tema: forçar tema escuro (body.dark-theme) e verificar contraste
+
+6) RECOMENDAÇÕES PRÓXIMAS (SEM SAIR DO OFFLINE)
+- Integrar thresholds (ERP_CONST.thresholds) no dashboard para semáforos (saúde financeira)
+- UI de recorrências (listar/editar/pausar), pois o backend já existe
+- Export/Import manual JSON (backup controlado pelo usuário)
