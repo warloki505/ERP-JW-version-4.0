@@ -1,0 +1,37 @@
+# ERP Financeiro - .gitignore
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporários
+*.tmp
+*.temp
+.cache/
+
+# Node modules (se futuramente usar)
+node_modules/
+
+# Backups
+*.bak
+*.backup
+*~
+
+# Dados de teste (não commitar dados pessoais)
+localStorage_backup.json
+
+# ⚠️ NÃO PRECISA IGNORAR:
+# js/script.js  ← ✅ Este é CÓDIGO, deve ir pro GitHub!
+# style.css      ← ✅ Código, deve ir!
+# *.html         ✅ Código, deve ir!
