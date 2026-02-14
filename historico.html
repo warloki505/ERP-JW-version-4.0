@@ -77,12 +77,7 @@
     }
 
     function calcularResumo(list) {
-      let renda = 0;
-      let poupanca = 0;
-      let essenciais = 0;
-      let livres = 0;
-      let dividas = 0;
-
+      let renda = 0, poupanca = 0, essenciais = 0, livres = 0, dividas = 0;
       list.forEach((t) => {
         const v = Number(t.valor) || 0;
         if (t.tipo === "receita") renda += v;
@@ -91,15 +86,7 @@
         if (t.tipo === "despesa" && t.subtipo === "essencial") essenciais += v;
         if (t.tipo === "despesa" && t.subtipo === "livre") livres += v;
       });
-
-      return {
-        renda,
-        poupanca,
-        essenciais,
-        livres,
-        dividas,
-        saldo: renda - poupanca - essenciais - livres - dividas
-      };
+      return { renda, poupanca, essenciais, livres, dividas, saldo: renda - poupanca - essenciais - livres - dividas };
     }
 
     function loadHistorico() {
@@ -113,10 +100,8 @@
         document.getElementById('monthsList').innerHTML = `
           <div class="card" style="text-align: center; padding: 60px;">
             <h3 style="color: var(--muted);">📭 Nenhum histórico encontrado</h3>
-            <p class="text-muted">Comece a registrar suas finanças no dashboard</p>
-            <button onclick="location.href='dashboard.html'" class="btn btn--primary" style="margin-top: 16px;">
-              Ir para o Dashboard
-            </button>
+            <p class="text-muted">Comece a registrar no dashboard</p>
+            <button onclick="location.href='dashboard.html'" class="btn btn--primary">Ir para Dashboard</button>
           </div>
         `;
         return;
@@ -129,7 +114,6 @@
         const tx = JSON.parse(localStorage.getItem(txKey) || '[]');
         const resumo = calcularResumo(tx);
         const label = getMonthLabel(monthId);
-        
         const saldoClass = resumo.saldo >= 0 ? 'text-success' : 'text-danger';
         const mesAtual = monthId === getMonthId(new Date());
         
@@ -140,51 +124,23 @@
               <div style="flex: 1; min-width: 200px;">
                 <h3 style="margin-bottom: 4px;">
                   ${label}
-                  ${mesAtual ? '<span class="badge badge-poupanca" style="margin-left: 8px;">MÊS ATUAL</span>' : ''}
+                  ${mesAtual ? '<span class="badge badge-poupanca">MÊS ATUAL</span>' : ''}
                 </h3>
-                <p class="text-muted" style="font-size: 13px; margin: 0;">
-                  ${tx.length} lançamento${tx.length !== 1 ? 's' : ''}
-                </p>
+                <p class="text-muted">${tx.length} lançamento(s)</p>
               </div>
               
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; flex: 2;">
-                <div>
-                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Receitas</div>
-                  <div style="font-weight: 600; color: var(--success);">${brl(resumo.renda)}</div>
-                </div>
-                
-                <div>
-                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Despesas</div>
-                  <div style="font-weight: 600; color: var(--danger);">${brl(resumo.essenciais + resumo.livres)}</div>
-                </div>
-                
-                <div>
-                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Poupança</div>
-                  <div style="font-weight: 600; color: var(--primary);">${brl(resumo.poupanca)}</div>
-                </div>
-                
-                <div>
-                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Dívidas</div>
-                  <div style="font-weight: 600; color: var(--divida);">${brl(resumo.dividas)}</div>
-                </div>
-                
-                <div>
-                  <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Saldo</div>
-                  <div style="font-weight: 700;" class="${saldoClass}">${brl(resumo.saldo)}</div>
-                </div>
+              <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; flex: 3;">
+                <div><span class="text-muted">Receitas</span><br><strong style="color:var(--success);">${brl(resumo.renda)}</strong></div>
+                <div><span class="text-muted">Despesas</span><br><strong style="color:var(--danger);">${brl(resumo.essenciais + resumo.livres)}</strong></div>
+                <div><span class="text-muted">Poupança</span><br><strong style="color:var(--primary);">${brl(resumo.poupanca)}</strong></div>
+                <div><span class="text-muted">Dívidas</span><br><strong style="color:var(--divida);">${brl(resumo.dividas)}</strong></div>
+                <div><span class="text-muted">Saldo</span><br><strong class="${saldoClass}">${brl(resumo.saldo)}</strong></div>
               </div>
               
-              <div style="display: flex; gap: 8px;">
-                <button onclick="verDetalhes('${monthId}')" class="btn btn--primary btn-mini">
-                  📋 Ver Detalhes
-                </button>
-                ${!mesAtual ? `
-                  <button onclick="excluirMes('${monthId}')" class="btn btn--ghost btn-mini">
-                    🗑️
-                  </button>
-                ` : ''}
+              <div>
+                <button onclick="verDetalhes('${monthId}')" class="btn btn--primary btn-mini">📋 Ver</button>
+                ${!mesAtual ? `<button onclick="excluirMes('${monthId}')" class="btn btn--ghost btn-mini">🗑️</button>` : ''}
               </div>
-              
             </div>
           </div>
         `;
@@ -200,28 +156,20 @@
 
     function excluirMes(monthId) {
       const label = getMonthLabel(monthId);
-      
-      if (!confirm(`⚠️ ATENÇÃO!\n\nDeseja realmente excluir TODOS os dados de ${label}?\n\nEsta ação não pode ser desfeita.`)) {
-        return;
-      }
-      
-      const txKey = `gf_erp_tx_${monthId}`;
-      localStorage.removeItem(txKey);
-      
-      alert(`✓ Dados de ${label} foram removidos`);
+      if (!confirm(`⚠️ Excluir ${label}?`)) return;
+      localStorage.removeItem(`gf_erp_tx_${monthId}`);
+      alert(`✓ ${label} removido`);
       loadHistorico();
     }
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (confirm("Deseja realmente sair?")) {
+      if (confirm("Sair?")) {
         localStorage.setItem(LOGGED_KEY, "false");
         window.location.href = "index.html";
       }
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadHistorico();
-    });
+    document.addEventListener('DOMContentLoaded', loadHistorico);
   </script>
 </body>
 </html>
