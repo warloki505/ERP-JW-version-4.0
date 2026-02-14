@@ -29,4 +29,9 @@ node_modules/
 *~
 
 # Dados de teste (não commitar dados pessoais)
-# localStorage_backup.json
+localStorage_backup.json
+
+# ⚠️ NÃO PRECISA IGNORAR:
+# js/script.js  ← ✅ Este é CÓDIGO, deve ir pro GitHub!
+# style.css      ← ✅ Código, deve ir!
+# *.html         ✅ Código, deve ir!
