@@ -119,7 +119,7 @@
           
           <div class="form-group">
             <label for="receitaDescricao">Descrição (opcional)</label>
-            <input type="text" id="receitaDescricao" name="descricao" placeholder="Ex: Salário de fevereiro" />
+            <input type="text" id="receitaDescricao" name="descricao" placeholder="Ex: Salário" />
           </div>
           
           <button class="btn btn--success" type="submit" style="width: 100%;">
@@ -158,7 +158,7 @@
           
           <div class="form-group">
             <label for="poupancaDescricao">Descrição (opcional)</label>
-            <input type="text" id="poupancaDescricao" name="descricao" placeholder="Ex: Reserva de emergência" />
+            <input type="text" id="poupancaDescricao" name="descricao" placeholder="Ex: Reserva" />
           </div>
           
           <button class="btn btn--primary" type="submit" style="width: 100%;">
@@ -215,7 +215,7 @@
         </form>
       </div>
 
-      <!-- COLUNA 4: DÍVIDAS (NOVO) -->
+      <!-- COLUNA 4: DÍVIDAS -->
       <div class="card" style="border: 2px solid var(--divida);">
         <h3>⚠️ DÍVIDAS</h3>
         <form id="formDivida" class="form">
@@ -245,7 +245,7 @@
           
           <div class="form-group">
             <label for="dividaDescricao">Descrição (opcional)</label>
-            <input type="text" id="dividaDescricao" name="descricao" placeholder="Ex: Parcelamento em 12x" />
+            <input type="text" id="dividaDescricao" name="descricao" placeholder="Ex: Parcelamento" />
           </div>
           
           <button class="btn btn--danger" type="submit" style="width: 100%; background: var(--divida);">
@@ -289,13 +289,13 @@
         ↑ Voltar ao topo
       </button>
       <button onclick="window.print()" class="btn btn--ghost">
-        🖨️ Imprimir / Exportar PDF
+        🖨️ Imprimir
       </button>
       <button onclick="location.href='charts.html'" class="btn btn--ghost">
-        📊 Exportar Gráficos
+        📊 Gráficos
       </button>
       <button id="btnLimparMes" class="btn btn--danger">
-        🗑️ Limpar todos os dados do mês
+        🗑️ Limpar mês
       </button>
       <button class="btn btn--ghost js-back">↩️ Voltar</button>
     </section>
@@ -342,12 +342,12 @@
       </div>
       <div class="modal-footer">
         <button onclick="closeEditModal()" class="btn btn--ghost">Cancelar</button>
-        <button onclick="saveEdit()" class="btn btn--primary">💾 Salvar alterações</button>
+        <button onclick="saveEdit()" class="btn btn--primary">💾 Salvar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: FIXAR LANÇAMENTO (RECORRÊNCIA) -->
+  <!-- MODAL: FIXAR LANÇAMENTO -->
   <div id="modalFixar" class="modal-overlay hidden" style="display: none;">
     <div class="modal">
       <div class="modal-header">
@@ -355,7 +355,7 @@
         <button onclick="closeFixarModal()" class="btn btn--ghost btn-mini">✕</button>
       </div>
       <div class="modal-body">
-        <p class="text-muted" style="margin-top: 0;">Este lançamento será repetido automaticamente nos meses escolhidos.</p>
+        <p class="text-muted" style="margin-top: 0;">Este lançamento será repetido automaticamente.</p>
 
         <div class="status status--info" style="margin-bottom: 12px;">
           <strong id="fixResumo">—</strong>
@@ -381,7 +381,7 @@
           <div class="form-group">
             <label style="display:flex; align-items:center; gap:8px; font-size: 13px;">
               <input type="checkbox" id="fixAplicarAtual" checked />
-              Aplicar também no mês atual
+              Aplicar no mês atual
             </label>
           </div>
         </form>
