@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ERP Financeiro JW - Gestão Financeira Pessoal v3.1" />
-  <title>ERP Financeiro JW - Dashboard v3.1</title>
+  <meta name="description" content="ERP Financeiro JW - Gestão Financeira Pessoal v4.0" />
+  <meta name="author" content="JW" />
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ERP Financeiro JW - Dashboard v4.0</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -12,12 +16,13 @@
   <!-- HEADER -->
   <header class="topbar">
     <div class="container topbar__row">
-      <h1>💰 ERP Financeiro JW v3.1</h1>
+      <h1>💰 ERP Financeiro JW v4.0</h1>
       <div class="topbar__actions">
         <span id="userName" class="text-muted" style="font-size: 14px;"></span>
         <button id="btnPerfil" class="btn btn--ghost">⚙️ Perfil</button>
         <button id="btnHistorico" class="btn btn--ghost">📊 Histórico</button>
-        <button id="logoutBtn" class="btn btn--ghost">🚪 Sair</button>
+        <button id="logoutBtn" class="btn btn--ghost js-logout">🚪 Sair</button>
+        <button class="btn btn--ghost btn-mini js-theme-toggle">🌓</button>
       </div>
     </div>
   </header>
@@ -292,6 +297,7 @@
       <button id="btnLimparMes" class="btn btn--danger">
         🗑️ Limpar todos os dados do mês
       </button>
+      <button class="btn btn--ghost js-back">↩️ Voltar</button>
     </section>
 
   </main>
@@ -341,7 +347,6 @@
     </div>
   </div>
 
-
   <!-- MODAL: FIXAR LANÇAMENTO (RECORRÊNCIA) -->
   <div id="modalFixar" class="modal-overlay hidden" style="display: none;">
     <div class="modal">
@@ -388,10 +393,10 @@
     </div>
   </div>
 
-
   <!-- SCRIPTS -->
   <script src="js/constantes.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/script.js"></script>
   <script src="js/dashboard.js"></script>
 </body>
 </html>
