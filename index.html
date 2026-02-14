@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sistema de Gestão Financeira Pessoal" />
-  <title>ERP Financeiro - Login</title>
+  <meta name="description" content="Sistema de Gestão Financeira Pessoal v4.0" />
+  <meta name="author" content="JW" />
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ERP Financeiro JW v4.0 - Login</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <main class="container" style="max-width: 800px; padding-top: 60px;">
     <div style="text-align: center; margin-bottom: 40px;">
-      <h1>💰 Gestor Financeiro</h1>
+      <h1>💰 ERP Financeiro JW v4.0</h1>
       <p class="text-muted">Controle suas finanças com inteligência</p>
     </div>
 
@@ -98,36 +102,30 @@
     <p class="text-center text-muted" style="margin-top: 32px;">
       <small>🔒 Modo Offline - Dados salvos apenas neste navegador</small>
     </p>
+    
+    <!-- Botão tema (opcional) -->
+    <div class="text-center" style="margin-top: 20px;">
+      <button class="btn btn--ghost btn-mini js-theme-toggle">🌓 Alternar tema</button>
+    </div>
   </main>
 
+  <!-- SCRIPTS -->
+  <script src="js/constantes.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/script.js"></script>
+  
   <script>
-    // ===============================
-    // CONSTANTES
-    // ===============================
+    // Mantém o script original do index.html aqui
     const USER_KEY = "gf_erp_user";
     const LOGGED_KEY = "gf_erp_logged";
-
-    // ===============================
-    // ELEMENTOS DOM
-    // ===============================
     const statusEl = document.getElementById("status");
     const signupForm = document.getElementById("signup-form");
     const loginForm = document.getElementById("login-form");
 
-    // ===============================
-    // VERIFICAR SE JÁ ESTÁ LOGADO
-    // ===============================
     if (localStorage.getItem(LOGGED_KEY) === "true") {
       window.location.href = "dashboard.html";
     }
 
-    // ===============================
-    // FUNÇÕES AUXILIARES
-    // ===============================
-    
-    /**
-     * Hash simples para senha (SHA-256)
-     */
     async function hashPassword(password) {
       const encoder = new TextEncoder();
       const data = encoder.encode(password);
@@ -136,31 +134,20 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    /**
-     * Exibe mensagem de status
-     */
     function showStatus(message, type) {
       statusEl.textContent = message;
       statusEl.className = `status status--${type}`;
       statusEl.classList.remove('hidden');
-      
-      // Auto-hide após 5 segundos
       setTimeout(() => {
         statusEl.classList.add('hidden');
       }, 5000);
     }
 
-    /**
-     * Valida formato de e-mail
-     */
     function isValidEmail(email) {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return regex.test(email);
     }
 
-    // ===============================
-    // HANDLER: CADASTRO
-    // ===============================
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       
@@ -168,7 +155,6 @@
       const email = document.getElementById('signup-email').value.trim().toLowerCase();
       const senha = document.getElementById('signup-password').value;
 
-      // Validações
       if (!nome || nome.length < 3) {
         showStatus("Nome deve ter no mínimo 3 caracteres.", "error");
         return;
@@ -184,7 +170,6 @@
         return;
       }
 
-      // Verificar se usuário já existe
       const existingUser = JSON.parse(localStorage.getItem(USER_KEY) || "null");
       if (existingUser && existingUser.email === email) {
         showStatus("Este e-mail já está cadastrado. Faça login.", "error");
@@ -192,10 +177,8 @@
       }
 
       try {
-        // Hash da senha
         const senhaHash = await hashPassword(senha);
         
-        // Salvar usuário
         const usuario = {
           nome,
           email,
@@ -206,11 +189,8 @@
         localStorage.setItem(USER_KEY, JSON.stringify(usuario));
         
         showStatus("✓ Conta criada com sucesso! Agora faça login.", "ok");
-        
-        // Limpar formulário
         signupForm.reset();
         
-        // Focar no formulário de login
         setTimeout(() => {
           document.getElementById('login-email').focus();
         }, 1000);
@@ -221,16 +201,12 @@
       }
     });
 
-    // ===============================
-    // HANDLER: LOGIN
-    // ===============================
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       
       const email = document.getElementById('login-email').value.trim().toLowerCase();
       const senha = document.getElementById('login-password').value;
 
-      // Validações básicas
       if (!isValidEmail(email)) {
         showStatus("E-mail inválido.", "error");
         return;
@@ -242,7 +218,6 @@
       }
 
       try {
-        // Buscar usuário
         const usuario = JSON.parse(localStorage.getItem(USER_KEY) || "null");
         
         if (!usuario) {
@@ -250,17 +225,12 @@
           return;
         }
 
-        // Hash da senha fornecida
         const senhaHash = await hashPassword(senha);
         
-        // Verificar credenciais
         if (usuario.email === email && usuario.senha === senhaHash) {
-          // Login bem-sucedido
           localStorage.setItem(LOGGED_KEY, "true");
-          
           showStatus("✓ Login realizado! Redirecionando...", "ok");
           
-          // Redirecionar após animação
           setTimeout(() => {
             window.location.href = "dashboard.html";
           }, 800);
@@ -275,9 +245,6 @@
       }
     });
 
-    // ===============================
-    // ANIMAÇÃO DE ENTRADA
-    // ===============================
     document.addEventListener('DOMContentLoaded', () => {
       const cards = document.querySelectorAll('.card');
       cards.forEach((card, index) => {
