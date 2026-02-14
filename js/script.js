@@ -1,12 +1,6 @@
 /* =====================================================
-   ERP FINANCEIRO JW v4.0 - SCRIPT PRINCIPAL
+   ERP FINANCEIRO JW v4.0.1 - SCRIPT PRINCIPAL
    Data: 14/02/2026
-   
-   FUNÇÕES:
-   - Gerenciamento de navegação entre páginas
-   - Utilities globais compartilhadas
-   - Inicialização de componentes comuns
-   - Integração com constantes.js e config.js
    ===================================================== */
 
 (function() {
@@ -28,10 +22,10 @@
     // CONFIGURAÇÕES GLOBAIS
     // ===============================
     const ERP_CONFIG = {
-        version: '4.0.0',
+        version: '4.0.1',
         appName: 'ERP Financeiro JW',
         storagePrefix: 'gf_erp_',
-        debug: false, // Mude para true para logs de depuração
+        debug: false,
         pages: {
             index: 'index.html',
             dashboard: 'dashboard.html',
@@ -60,38 +54,31 @@
     // GERENCIAMENTO DE AUTENTICAÇÃO
     // ===============================
     const Auth = {
-        // Chaves do localStorage
         keys: {
             user: 'gf_erp_user',
             logged: 'gf_erp_logged'
         },
 
-        // Verifica se usuário está logado
         isLoggedIn: function() {
             return localStorage.getItem(this.keys.logged) === 'true';
         },
 
-        // Redireciona se não estiver logado
         requireAuth: function(redirectTo = 'index.html') {
             if (!this.isLoggedIn() && !window.location.pathname.includes(redirectTo)) {
-                logger.log('Usuário não autenticado, redirecionando...');
                 window.location.href = redirectTo;
                 return false;
             }
             return true;
         },
 
-        // Obtém dados do usuário atual
         getCurrentUser: function() {
             try {
                 return JSON.parse(localStorage.getItem(this.keys.user) || 'null');
             } catch (e) {
-                logger.error('Erro ao carregar usuário:', e);
                 return null;
             }
         },
 
-        // Faz logout
         logout: function(redirectTo = 'index.html') {
             if (confirm('Deseja realmente sair?')) {
                 localStorage.setItem(this.keys.logged, 'false');
@@ -99,11 +86,10 @@
             }
         },
 
-        // Nome de exibição do usuário
         getDisplayName: function() {
             const user = this.getCurrentUser();
             if (user && user.nome) {
-                return user.nome.split(' ')[0]; // Primeiro nome
+                return user.nome.split(' ')[0];
             }
             return 'Usuário';
         }
@@ -113,7 +99,6 @@
     // UTILITIES DE FORMATAÇÃO
     // ===============================
     const Formatters = {
-        // Formata valor para moeda BRL
         currency: function(value) {
             return (Number(value) || 0).toLocaleString('pt-BR', {
                 style: 'currency',
@@ -121,13 +106,10 @@
             });
         },
 
-        // Formata data
         date: function(dateStr, format = 'short') {
             if (!dateStr) return '';
-            
             try {
                 const date = new Date(dateStr + 'T00:00:00');
-                
                 if (format === 'short') {
                     return date.toLocaleDateString('pt-BR');
                 } else if (format === 'long') {
@@ -142,14 +124,12 @@
                         year: 'numeric'
                     });
                 }
-                
                 return date.toLocaleDateString('pt-BR');
             } catch (e) {
                 return dateStr;
             }
         },
 
-        // Formata mês (YYYY-MM para nome do mês)
         monthLabel: function(monthId) {
             if (!monthId) return '';
             const [year, month] = monthId.split('-');
@@ -159,22 +139,8 @@
             });
         },
 
-        // Formata percentual
         percent: function(value, decimals = 1) {
             return (Number(value) || 0).toFixed(decimals) + '%';
-        },
-
-        // Abrevia números grandes (1.5k, 1M, etc)
-        compact: function(value) {
-            const num = Number(value) || 0;
-            
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'k';
-            }
-            
-            return num.toFixed(2);
         }
     };
 
@@ -182,25 +148,20 @@
     // UTILITIES DE DOM
     // ===============================
     const DOM = {
-        // Get element by ID
         $: function(id) {
             return document.getElementById(id);
         },
 
-        // Query selector
         q: function(selector, context = document) {
             return context.querySelector(selector);
         },
 
-        // Query selector all
         qq: function(selector, context = document) {
             return context.querySelectorAll(selector);
         },
 
-        // Cria elemento com atributos
         create: function(tag, attributes = {}, children = []) {
             const element = document.createElement(tag);
-            
             Object.entries(attributes).forEach(([key, value]) => {
                 if (key === 'className') {
                     element.className = value;
@@ -214,7 +175,6 @@
                     element.setAttribute(key, value);
                 }
             });
-            
             children.forEach(child => {
                 if (typeof child === 'string') {
                     element.appendChild(document.createTextNode(child));
@@ -222,11 +182,9 @@
                     element.appendChild(child);
                 }
             });
-            
             return element;
         },
 
-        // Mostra/esconde elemento
         toggle: function(element, show) {
             if (!element) return;
             if (show === undefined) {
@@ -236,7 +194,6 @@
             element.classList.toggle('hidden', !show);
         },
 
-        // Limpa elemento
         empty: function(element) {
             if (element) element.innerHTML = '';
         }
@@ -251,9 +208,7 @@
                 className: `toast toast--${type}`,
                 textContent: message
             });
-            
             document.body.appendChild(toast);
-            
             setTimeout(() => {
                 toast.style.animation = 'slideOut 0.3s ease-out';
                 setTimeout(() => toast.remove(), 300);
@@ -294,7 +249,6 @@
                 document.body.classList.remove('dark-theme');
             }
             localStorage.setItem(this.key, theme);
-            logger.log(`Tema alterado para: ${theme}`);
         },
         
         toggle: function() {
@@ -304,22 +258,13 @@
         },
         
         init: function() {
-            // Detecta preferência do sistema
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             const savedTheme = this.getCurrent();
-            
             if (savedTheme === 'dark' || (savedTheme === 'light' && prefersDark)) {
                 this.setTheme('dark');
             } else {
                 this.setTheme('light');
             }
-            
-            // Observa mudanças na preferência do sistema
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (!localStorage.getItem(this.key)) {
-                    this.setTheme(e.matches ? 'dark' : 'light');
-                }
-            });
         }
     };
 
@@ -327,35 +272,16 @@
     // GERENCIADOR DE NAVEGAÇÃO
     // ===============================
     const Navigation = {
-        // Vai para uma página
         goTo: function(page) {
             const target = ERP_CONFIG.pages[page] || page;
             window.location.href = target;
         },
 
-        // Voltar para dashboard
         backToDashboard: function() {
             this.goTo('dashboard');
         },
 
-        // Recarrega página atual
-        reload: function() {
-            window.location.reload();
-        },
-
-        // Obtém parâmetros da URL
-        getParams: function() {
-            const params = new URLSearchParams(window.location.search);
-            const result = {};
-            for (const [key, value] of params) {
-                result[key] = value;
-            }
-            return result;
-        },
-
-        // Adiciona botões de navegação automáticos
         initNavButtons: function() {
-            // Botão de voltar
             DOM.qq('.js-back').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -363,7 +289,6 @@
                 });
             });
 
-            // Botão de dashboard
             DOM.qq('.js-dashboard').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -371,7 +296,6 @@
                 });
             });
 
-            // Botão de logout
             DOM.qq('.js-logout').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -379,85 +303,13 @@
                 });
             });
 
-            // Botão de tema
             DOM.qq('.js-theme-toggle').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const newTheme = Theme.toggle();
-                    Toast.info(`Tema ${newTheme} ativado`);
+                    Theme.toggle();
+                    Toast.info(`Tema alterado`);
                 });
             });
-        }
-    };
-
-    // ===============================
-    // UTILITIES DE DADOS
-    // ===============================
-    const DataUtils = {
-        // Gera ID único
-        uid: function() {
-            return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substr(2);
-        },
-
-        // Calcula resumo do mês (mesma lógica do dashboard)
-        calculateSummary: function(transactions) {
-            let renda = 0, poupanca = 0, essenciais = 0, livres = 0, dividas = 0;
-            
-            (transactions || []).forEach(t => {
-                const v = Number(t.valor) || 0;
-                if (t.tipo === 'receita') renda += v;
-                else if (t.tipo === 'poupanca') poupanca += v;
-                else if (t.tipo === 'divida') dividas += v;
-                else if (t.tipo === 'despesa') {
-                    if (t.subtipo === 'essencial') essenciais += v;
-                    else if (t.subtipo === 'livre') livres += v;
-                }
-            });
-            
-            return {
-                renda,
-                poupanca,
-                essenciais,
-                livres,
-                dividas,
-                saldo: renda - poupanca - essenciais - livres - dividas,
-                totalDespesas: essenciais + livres,
-                totalGeral: renda + poupanca + essenciais + livres + dividas
-            };
-        },
-
-        // Obtém mês atual no formato YYYY-MM
-        getCurrentMonthId: function() {
-            const d = new Date();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        },
-
-        // Obtém ID do mês a partir de uma data
-        getMonthId: function(date = new Date()) {
-            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        },
-
-        // Carrega transações de um mês
-        loadTransactions: function(monthId) {
-            try {
-                return JSON.parse(localStorage.getItem(`gf_erp_tx_${monthId}`) || '[]');
-            } catch (e) {
-                logger.error('Erro ao carregar transações:', e);
-                return [];
-            }
-        },
-
-        // Salva transações de um mês
-        saveTransactions: function(monthId, transactions) {
-            localStorage.setItem(`gf_erp_tx_${monthId}`, JSON.stringify(transactions));
-        },
-
-        // Obtém lista de meses com dados
-        getAvailableMonths: function() {
-            return Object.keys(localStorage)
-                .filter(key => key.startsWith('gf_erp_tx_'))
-                .map(key => key.replace('gf_erp_tx_', ''))
-                .sort((a, b) => b.localeCompare(a)); // Mais recente primeiro
         }
     };
 
@@ -465,10 +317,7 @@
     // EXPORTAÇÃO PARA USO GLOBAL
     // ===============================
     window.ERP = {
-        // Configurações
         config: ERP_CONFIG,
-        
-        // Módulos
         logger,
         auth: Auth,
         format: Formatters,
@@ -476,38 +325,21 @@
         toast: Toast,
         theme: Theme,
         nav: Navigation,
-        data: DataUtils,
-        
-        // Utilities avulsas
         $: DOM.$,
         q: DOM.q,
         qq: DOM.qq,
-        
-        // Versão
         version: ERP_CONFIG.version,
         
-        // Inicializador
         init: function() {
-            logger.log(`Iniciando ERP Financeiro v${this.version}`);
-            
-            // Inicializa tema
             this.theme.init();
-            
-            // Inicializa navegação
             this.nav.initNavButtons();
-            
-            // Verifica autenticação (exceto na página de login)
             if (!window.location.pathname.includes('index.html')) {
                 this.auth.requireAuth();
             }
-            
-            // Adiciona nome do usuário se elemento existir
             const userNameEl = this.$('userName');
             if (userNameEl && this.auth.isLoggedIn()) {
                 userNameEl.textContent = `Olá, ${this.auth.getDisplayName()}`;
             }
-            
-            logger.log('ERP Financeiro inicializado com sucesso!');
         }
     };
 
@@ -517,13 +349,5 @@
     document.addEventListener('DOMContentLoaded', () => {
         window.ERP.init();
     });
-
-    // ===============================
-    // EXPÕE FUNÇÕES ÚTEIS NO CONSOLE (para debug)
-    // ===============================
-    if (ERP_CONFIG.debug) {
-        window.ERP_debug = window.ERP;
-        console.log('✨ ERP Financeiro disponível no console como window.ERP ou window.ERP_debug');
-    }
 
 })();
