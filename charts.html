@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ERP Financeiro JW v3.0 - Relatório Completo</title>
+  <meta name="description" content="Relatórios e gráficos do ERP Financeiro JW v4.0" />
+  <meta name="author" content="JW" />
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ERP Financeiro JW v4.0 - Relatório Completo</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -11,10 +16,11 @@
 <body>
   <header class="topbar no-print">
     <div class="container topbar__row">
-      <h1>💰 ERP Financeiro JW v3.0 - Relatórios</h1>
+      <h1>💰 ERP Financeiro JW v4.0 - Relatórios</h1>
       <div class="topbar__actions">
-        <button onclick="location.href='dashboard.html'" class="btn btn--ghost">← Dashboard</button>
-        <button id="logoutBtn" class="btn btn--ghost">🚪 Sair</button>
+        <button onclick="location.href='dashboard.html'" class="btn btn--ghost js-dashboard">← Dashboard</button>
+        <button id="logoutBtn" class="btn btn--ghost js-logout">🚪 Sair</button>
+        <button class="btn btn--ghost btn-mini js-theme-toggle">🌓</button>
       </div>
     </div>
   </header>
@@ -128,9 +134,15 @@
     <section class="footer-actions no-print">
       <button onclick="window.print()" class="btn btn--primary">🖨️ Gerar PDF</button>
       <button onclick="location.reload()" class="btn btn--ghost">🔄 Atualizar</button>
+      <button class="btn btn--ghost js-back">↩️ Voltar</button>
     </section>
 
   </main>
+
+  <!-- SCRIPTS -->
+  <script src="js/constantes.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/script.js"></script>
 
   <script>
     const LOGGED_KEY = "gf_erp_logged";
