@@ -51,7 +51,7 @@
     <section class="card">
       <h2>📊 PERFIL FINANCEIRO</h2>
       <p class="text-muted" style="margin-bottom: 20px;">
-        Defina seu perfil e como deseja distribuir sua renda mensalmente (planejamento).
+        Defina seu perfil e como deseja distribuir sua renda mensalmente.
       </p>
 
       <form id="formPerfil" class="form">
@@ -59,37 +59,32 @@
           <label for="tipoPerfil">Tipo de Perfil</label>
           <select id="tipoPerfil" required>
             <option value="">Selecione seu perfil</option>
-            <option value="responsavel">🎯 Responsável (foco em estabilidade)</option>
-            <option value="conservador">🛡️ Conservador (máxima segurança)</option>
-            <option value="poupador_agressivo">💰 Poupador Agressivo (acumular)</option>
-            <option value="livre">🌟 Livre (mais flexibilidade)</option>
-            <option value="quitador">🎯 Quitador de Dívidas (prioridade)</option>
+            <option value="responsavel">🎯 Responsável (50/20/20/10)</option>
+            <option value="conservador">🛡️ Conservador (50/10/30/10)</option>
+            <option value="poupador_agressivo">💰 Poupador Agressivo (45/15/30/10)</option>
+            <option value="livre">🌟 Livre (50/30/10/10)</option>
+            <option value="quitador">🎯 Quitador de Dívidas (45/15/15/25)</option>
           </select>
-          <small class="text-muted">Cada perfil tem percentuais sugeridos diferentes</small>
         </div>
 
         <div class="form-group">
           <label for="percDespesasEssenciais">Despesas Essenciais (%)</label>
-          <input type="number" id="percDespesasEssenciais" min="0" max="100" step="1" placeholder="Ex: 50" required />
-          <small class="text-muted">Moradia, alimentação, transporte, saúde...</small>
+          <input type="number" id="percDespesasEssenciais" min="0" max="100" step="1" required />
         </div>
 
         <div class="form-group">
           <label for="percDespesasLivres">Despesas Livres (%)</label>
-          <input type="number" id="percDespesasLivres" min="0" max="100" step="1" placeholder="Ex: 30" required />
-          <small class="text-muted">Lazer, entretenimento, extras...</small>
+          <input type="number" id="percDespesasLivres" min="0" max="100" step="1" required />
         </div>
 
         <div class="form-group">
           <label for="percPoupanca">Poupança / Investimentos (%)</label>
-          <input type="number" id="percPoupanca" min="0" max="100" step="1" placeholder="Ex: 20" required />
-          <small class="text-muted">Reserva de emergência, investimentos...</small>
+          <input type="number" id="percPoupanca" min="0" max="100" step="1" required />
         </div>
 
         <div class="form-group">
           <label for="percQuitacaoDividas">% para quitar dívidas</label>
-          <input type="number" id="percQuitacaoDividas" min="0" max="100" step="1" placeholder="Ex: 10" required />
-          <small class="text-muted">Planejamento educacional. (Não automatiza nada no dashboard)</small>
+          <input type="number" id="percQuitacaoDividas" min="0" max="100" step="1" required />
         </div>
 
         <div id="totalPerc" class="status status--info" style="margin-top: 16px;">
@@ -97,94 +92,44 @@
         </div>
 
         <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 8px;">
-          💾 Salvar Perfil Financeiro
+          💾 Salvar Perfil
         </button>
       </form>
     </section>
 
     <!-- PERFIS SUGERIDOS -->
     <section class="card">
-      <h2>💡 PERFIS SUGERIDOS v4.0</h2>
+      <h2>💡 PERFIS SUGERIDOS</h2>
       <div style="display: grid; gap: 16px;">
 
         <div class="suggestion-box">
-          <h3 style="margin-bottom: 8px;">🎯 Responsável</h3>
-          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
-            Equilíbrio entre segurança e qualidade de vida
-          </p>
-          <div class="suggestion-badges">
-            <span class="badge badge-despesa">50% Essenciais</span>
-            <span class="badge badge-despesa">20% Livres</span>
-            <span class="badge badge-poupanca">20% Poupança</span>
-            <span class="badge badge-divida">10% Quitar Dívidas</span>
-          </div>
-          <button onclick="aplicarPerfil('responsavel')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
-            Aplicar este perfil
-          </button>
+          <h3>🎯 Responsável</h3>
+          <p class="text-muted">50% Essenciais | 20% Livres | 20% Poupança | 10% Dívidas</p>
+          <button onclick="aplicarPerfil('responsavel')" class="btn btn--ghost btn-mini">Aplicar</button>
         </div>
 
         <div class="suggestion-box">
-          <h3 style="margin-bottom: 8px;">🛡️ Conservador</h3>
-          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
-            Máxima segurança financeira e reservas
-          </p>
-          <div class="suggestion-badges">
-            <span class="badge badge-despesa">50% Essenciais</span>
-            <span class="badge badge-despesa">10% Livres</span>
-            <span class="badge badge-poupanca">30% Poupança</span>
-            <span class="badge badge-divida">10% Quitar Dívidas</span>
-          </div>
-          <button onclick="aplicarPerfil('conservador')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
-            Aplicar este perfil
-          </button>
+          <h3>🛡️ Conservador</h3>
+          <p class="text-muted">50% Essenciais | 10% Livres | 30% Poupança | 10% Dívidas</p>
+          <button onclick="aplicarPerfil('conservador')" class="btn btn--ghost btn-mini">Aplicar</button>
         </div>
 
         <div class="suggestion-box">
-          <h3 style="margin-bottom: 8px;">💰 Poupador Agressivo</h3>
-          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
-            Foco máximo em construir patrimônio
-          </p>
-          <div class="suggestion-badges">
-            <span class="badge badge-despesa">45% Essenciais</span>
-            <span class="badge badge-despesa">15% Livres</span>
-            <span class="badge badge-poupanca">30% Poupança</span>
-            <span class="badge badge-divida">10% Quitar Dívidas</span>
-          </div>
-          <button onclick="aplicarPerfil('poupador_agressivo')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
-            Aplicar este perfil
-          </button>
+          <h3>💰 Poupador Agressivo</h3>
+          <p class="text-muted">45% Essenciais | 15% Livres | 30% Poupança | 10% Dívidas</p>
+          <button onclick="aplicarPerfil('poupador_agressivo')" class="btn btn--ghost btn-mini">Aplicar</button>
         </div>
 
         <div class="suggestion-box">
-          <h3 style="margin-bottom: 8px;">🌟 Livre</h3>
-          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
-            Mais liberdade, sem perder um mínimo de disciplina
-          </p>
-          <div class="suggestion-badges">
-            <span class="badge badge-despesa">50% Essenciais</span>
-            <span class="badge badge-despesa">30% Livres</span>
-            <span class="badge badge-poupanca">10% Poupança</span>
-            <span class="badge badge-divida">10% Quitar Dívidas</span>
-          </div>
-          <button onclick="aplicarPerfil('livre')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
-            Aplicar este perfil
-          </button>
+          <h3>🌟 Livre</h3>
+          <p class="text-muted">50% Essenciais | 30% Livres | 10% Poupança | 10% Dívidas</p>
+          <button onclick="aplicarPerfil('livre')" class="btn btn--ghost btn-mini">Aplicar</button>
         </div>
 
         <div class="suggestion-box">
-          <h3 style="margin-bottom: 8px;">🎯 Quitador de Dívidas</h3>
-          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
-            Prioridade: zerar dívidas rapidamente
-          </p>
-          <div class="suggestion-badges">
-            <span class="badge badge-despesa">45% Essenciais</span>
-            <span class="badge badge-despesa">15% Livres</span>
-            <span class="badge badge-poupanca">15% Poupança</span>
-            <span class="badge badge-divida">25% Quitar Dívidas</span>
-          </div>
-          <button onclick="aplicarPerfil('quitador')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
-            Aplicar este perfil
-          </button>
+          <h3>🎯 Quitador de Dívidas</h3>
+          <p class="text-muted">45% Essenciais | 15% Livres | 15% Poupança | 25% Dívidas</p>
+          <button onclick="aplicarPerfil('quitador')" class="btn btn--ghost btn-mini">Aplicar</button>
         </div>
 
       </div>
@@ -193,36 +138,31 @@
     <!-- GERENCIADORES -->
     <section class="card">
       <h2>⚙️ GERENCIADORES</h2>
-      <p class="text-muted" style="margin-top: 0;">
-        Personalize as listas do sistema. Você pode <strong>ativar/desativar</strong> e <strong>renomear</strong> itens existentes.
-      </p>
 
       <div class="manager-grid">
         <!-- Categorias -->
         <div class="manager-card">
           <div class="manager-header">
-            <h3 style="margin:0;">📌 Categorias</h3>
+            <h3>📌 Categorias</h3>
             <select id="catGrupo" class="manager-select">
               <option value="receita">Receita</option>
               <option value="poupanca">Poupança</option>
-              <option value="despesa_essencial">Despesa Essencial</option>
-              <option value="despesa_livre">Despesa Livre</option>
+              <option value="despesa_essencial">Essencial</option>
+              <option value="despesa_livre">Livre</option>
               <option value="divida">Dívidas</option>
             </select>
           </div>
-
           <div id="catLista" class="manager-list"></div>
-
           <div class="manager-actions">
-            <button id="btnSalvarCats" class="btn btn--primary" type="button">Salvar Categorias</button>
-            <button id="btnResetCats" class="btn btn--ghost" type="button">Restaurar padrão</button>
+            <button id="btnSalvarCats" class="btn btn--primary">Salvar</button>
+            <button id="btnResetCats" class="btn btn--ghost">Restaurar</button>
           </div>
         </div>
 
         <!-- Bancos -->
         <div class="manager-card">
           <div class="manager-header">
-            <h3 style="margin:0;">🏦 Bancos</h3>
+            <h3>🏦 Bancos</h3>
             <select id="bankTipo" class="manager-select">
               <option value="receita">Receita</option>
               <option value="poupanca">Poupança</option>
@@ -230,18 +170,12 @@
               <option value="divida">Dívidas</option>
             </select>
           </div>
-
           <div id="bankLista" class="manager-list"></div>
-
           <div class="manager-actions">
-            <button id="btnSalvarBanks" class="btn btn--primary" type="button">Salvar Bancos</button>
-            <button id="btnResetBanks" class="btn btn--ghost" type="button">Restaurar padrão</button>
+            <button id="btnSalvarBanks" class="btn btn--primary">Salvar</button>
+            <button id="btnResetBanks" class="btn btn--ghost">Restaurar</button>
           </div>
         </div>
-      </div>
-
-      <div class="status status--info" style="margin-top: 14px;">
-        Dica: as mudanças aparecem nos selects do Dashboard automaticamente ao recarregar a página.
       </div>
     </section>
 
@@ -291,21 +225,15 @@
       const livres = Number(document.getElementById('percDespesasLivres').value) || 0;
       const poupanca = Number(document.getElementById('percPoupanca').value) || 0;
       const quita = Number(document.getElementById('percQuitacaoDividas').value) || 0;
-
       const total = essenciais + livres + poupanca + quita;
       const totalEl = document.getElementById('totalPerc');
-
       totalEl.innerHTML = `Total: <strong>${total}%</strong>`;
-
       if (total === 100) {
         totalEl.className = 'status status--ok';
-        totalEl.innerHTML += ' ✓ Perfeito!';
       } else if (total > 100) {
         totalEl.className = 'status status--error';
-        totalEl.innerHTML += ' ⚠️ Acima de 100%';
       } else {
         totalEl.className = 'status status--info';
-        totalEl.innerHTML += ` (faltam ${100 - total}%)`;
       }
     }
 
@@ -321,16 +249,13 @@
         livre: { essenciais: 50, livres: 30, poupanca: 10, quita: 10 },
         quitador: { essenciais: 45, livres: 15, poupanca: 15, quita: 25 }
       };
-
       const p = perfis[tipo];
       if (!p) return;
-
       document.getElementById('tipoPerfil').value = tipo;
       document.getElementById('percDespesasEssenciais').value = p.essenciais;
       document.getElementById('percDespesasLivres').value = p.livres;
       document.getElementById('percPoupanca').value = p.poupanca;
       document.getElementById('percQuitacaoDividas').value = p.quita;
-
       atualizarTotal();
       alert(`✓ Perfil "${tipo}" aplicado!`);
     }
@@ -338,18 +263,15 @@
 
     document.getElementById('formPerfil').addEventListener('submit', (e) => {
       e.preventDefault();
-
       const essenciais = Number(document.getElementById('percDespesasEssenciais').value);
       const livres = Number(document.getElementById('percDespesasLivres').value);
       const poupanca = Number(document.getElementById('percPoupanca').value);
       const quita = Number(document.getElementById('percQuitacaoDividas').value);
       const total = essenciais + livres + poupanca + quita;
-
       if (total !== 100) {
-        alert('⚠️ A soma dos percentuais deve ser exatamente 100%');
+        alert('⚠️ A soma deve ser 100%');
         return;
       }
-
       const perfil = {
         tipo: document.getElementById('tipoPerfil').value,
         percEssenciais: essenciais,
@@ -358,9 +280,8 @@
         percQuitacaoDividas: quita,
         dataAtualizacao: new Date().toISOString()
       };
-
       localStorage.setItem(PERFIL_KEY, JSON.stringify(perfil));
-      alert('✓ Perfil financeiro salvo!');
+      alert('✓ Perfil salvo!');
       setTimeout(() => window.location.href = 'dashboard.html', 900);
     });
 
@@ -396,9 +317,7 @@
         const idx = Number(inp.dataset.idx);
         if (items[idx]) items[idx].label = (inp.value || '').trim() || items[idx].originalLabel;
       });
-      if (!items.some(i => i.active)) {
-        items[0].active = true;
-      }
+      if (!items.some(i => i.active)) items[0].active = true;
       return items;
     }
 
@@ -415,7 +334,7 @@
       localStorage.removeItem('gf_erp_cfg_categorias');
       ERP_CFG.ensureCategoriesConfig();
       renderCatList(catGrupo.value);
-      alert('✓ Categorias restauradas ao padrão!');
+      alert('✓ Categorias restauradas!');
     });
 
     // GERENCIADOR DE BANCOS
@@ -450,9 +369,7 @@
         const idx = Number(inp.dataset.idx);
         if (items[idx]) items[idx].label = (inp.value || '').trim() || items[idx].originalLabel;
       });
-      if (!items.some(i => i.active)) {
-        items[0].active = true;
-      }
+      if (!items.some(i => i.active)) items[0].active = true;
       return items;
     }
 
@@ -469,7 +386,7 @@
       localStorage.removeItem('gf_erp_cfg_bancos');
       ERP_CFG.ensureBanksConfig();
       renderBankList(bankTipo.value);
-      alert('✓ Bancos restaurados ao padrão!');
+      alert('✓ Bancos restaurados!');
     });
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
