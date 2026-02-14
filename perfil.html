@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ERP Financeiro - Perfil Financeiro v3.1</title>
+  <meta name="description" content="Configure seu perfil financeiro no ERP JW v4.0" />
+  <meta name="author" content="JW" />
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ERP Financeiro JW - Perfil Financeiro v4.0</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <header class="topbar">
     <div class="container topbar__row">
-      <h1>💰 Gestor Financeiro</h1>
+      <h1>💰 ERP Financeiro JW v4.0</h1>
       <div class="topbar__actions">
-        <button onclick="location.href='dashboard.html'" class="btn btn--ghost">← Voltar ao Dashboard</button>
-        <button id="logoutBtn" class="btn btn--ghost">🚪 Sair</button>
+        <button onclick="location.href='dashboard.html'" class="btn btn--ghost js-dashboard">← Voltar ao Dashboard</button>
+        <button id="logoutBtn" class="btn btn--ghost js-logout">🚪 Sair</button>
+        <button class="btn btn--ghost btn-mini js-theme-toggle">🌓</button>
       </div>
     </div>
   </header>
@@ -55,7 +61,9 @@
             <option value="">Selecione seu perfil</option>
             <option value="responsavel">🎯 Responsável (foco em estabilidade)</option>
             <option value="conservador">🛡️ Conservador (máxima segurança)</option>
+            <option value="poupador_agressivo">💰 Poupador Agressivo (acumular)</option>
             <option value="livre">🌟 Livre (mais flexibilidade)</option>
+            <option value="quitador">🎯 Quitador de Dívidas (prioridade)</option>
           </select>
           <small class="text-muted">Cada perfil tem percentuais sugeridos diferentes</small>
         </div>
@@ -96,7 +104,7 @@
 
     <!-- PERFIS SUGERIDOS -->
     <section class="card">
-      <h2>💡 PERFIS SUGERIDOS</h2>
+      <h2>💡 PERFIS SUGERIDOS v4.0</h2>
       <div style="display: grid; gap: 16px;">
 
         <div class="suggestion-box">
@@ -106,8 +114,8 @@
           </p>
           <div class="suggestion-badges">
             <span class="badge badge-despesa">50% Essenciais</span>
-            <span class="badge badge-despesa">25% Livres</span>
-            <span class="badge badge-poupanca">15% Poupança</span>
+            <span class="badge badge-despesa">20% Livres</span>
+            <span class="badge badge-poupanca">20% Poupança</span>
             <span class="badge badge-divida">10% Quitar Dívidas</span>
           </div>
           <button onclick="aplicarPerfil('responsavel')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
@@ -121,12 +129,28 @@
             Máxima segurança financeira e reservas
           </p>
           <div class="suggestion-badges">
-            <span class="badge badge-despesa">55% Essenciais</span>
-            <span class="badge badge-despesa">15% Livres</span>
-            <span class="badge badge-poupanca">20% Poupança</span>
+            <span class="badge badge-despesa">50% Essenciais</span>
+            <span class="badge badge-despesa">10% Livres</span>
+            <span class="badge badge-poupanca">30% Poupança</span>
             <span class="badge badge-divida">10% Quitar Dívidas</span>
           </div>
           <button onclick="aplicarPerfil('conservador')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
+            Aplicar este perfil
+          </button>
+        </div>
+
+        <div class="suggestion-box">
+          <h3 style="margin-bottom: 8px;">💰 Poupador Agressivo</h3>
+          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
+            Foco máximo em construir patrimônio
+          </p>
+          <div class="suggestion-badges">
+            <span class="badge badge-despesa">45% Essenciais</span>
+            <span class="badge badge-despesa">15% Livres</span>
+            <span class="badge badge-poupanca">30% Poupança</span>
+            <span class="badge badge-divida">10% Quitar Dívidas</span>
+          </div>
+          <button onclick="aplicarPerfil('poupador_agressivo')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
             Aplicar este perfil
           </button>
         </div>
@@ -137,8 +161,8 @@
             Mais liberdade, sem perder um mínimo de disciplina
           </p>
           <div class="suggestion-badges">
-            <span class="badge badge-despesa">45% Essenciais</span>
-            <span class="badge badge-despesa">35% Livres</span>
+            <span class="badge badge-despesa">50% Essenciais</span>
+            <span class="badge badge-despesa">30% Livres</span>
             <span class="badge badge-poupanca">10% Poupança</span>
             <span class="badge badge-divida">10% Quitar Dívidas</span>
           </div>
@@ -147,15 +171,30 @@
           </button>
         </div>
 
+        <div class="suggestion-box">
+          <h3 style="margin-bottom: 8px;">🎯 Quitador de Dívidas</h3>
+          <p class="text-muted" style="font-size: 13px; margin-bottom: 12px;">
+            Prioridade: zerar dívidas rapidamente
+          </p>
+          <div class="suggestion-badges">
+            <span class="badge badge-despesa">45% Essenciais</span>
+            <span class="badge badge-despesa">15% Livres</span>
+            <span class="badge badge-poupanca">15% Poupança</span>
+            <span class="badge badge-divida">25% Quitar Dívidas</span>
+          </div>
+          <button onclick="aplicarPerfil('quitador')" class="btn btn--ghost btn-mini" style="margin-top: 12px;">
+            Aplicar este perfil
+          </button>
+        </div>
+
       </div>
     </section>
 
-    <!-- GERENCIADORES (v3.1) -->
+    <!-- GERENCIADORES -->
     <section class="card">
-      <h2>⚙️ GERENCIADORES (v3.1)</h2>
+      <h2>⚙️ GERENCIADORES</h2>
       <p class="text-muted" style="margin-top: 0;">
         Personalize as listas do sistema. Você pode <strong>ativar/desativar</strong> e <strong>renomear</strong> itens existentes.
-        <br /><small>Obs.: não cria novos itens e não apaga histórico.</small>
       </p>
 
       <div class="manager-grid">
@@ -208,27 +247,25 @@
 
   </main>
 
-  <!-- scripts base (v3.1) -->
+  <!-- SCRIPTS -->
   <script src="js/constantes.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/script.js"></script>
 
   <script>
     const USER_KEY = "gf_erp_user";
     const LOGGED_KEY = "gf_erp_logged";
     const PERFIL_KEY = "gf_erp_perfil";
 
-    // Verificar login
     if (localStorage.getItem(LOGGED_KEY) !== "true") {
       window.location.href = "index.html";
     }
 
-    // Garantir configs (se não existirem ainda)
     if (window.ERP_CFG) {
       ERP_CFG.ensureCategoriesConfig();
       ERP_CFG.ensureBanksConfig();
     }
 
-    // Carregar dados do usuário
     const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
     if (user) {
       document.getElementById('displayNome').value = user.nome || '';
@@ -239,7 +276,6 @@
       }
     }
 
-    // Carregar perfil salvo
     const perfilSalvo = JSON.parse(localStorage.getItem(PERFIL_KEY) || 'null');
     if (perfilSalvo) {
       document.getElementById('tipoPerfil').value = perfilSalvo.tipo || '';
@@ -277,12 +313,13 @@
       document.getElementById(id).addEventListener('input', atualizarTotal);
     });
 
-    // Perfis sugeridos
     function aplicarPerfil(tipo) {
       const perfis = {
-        responsavel: { essenciais: 50, livres: 25, poupanca: 15, quita: 10 },
-        conservador: { essenciais: 55, livres: 15, poupanca: 20, quita: 10 },
-        livre: { essenciais: 45, livres: 35, poupanca: 10, quita: 10 }
+        responsavel: { essenciais: 50, livres: 20, poupanca: 20, quita: 10 },
+        conservador: { essenciais: 50, livres: 10, poupanca: 30, quita: 10 },
+        poupador_agressivo: { essenciais: 45, livres: 15, poupanca: 30, quita: 10 },
+        livre: { essenciais: 50, livres: 30, poupanca: 10, quita: 10 },
+        quitador: { essenciais: 45, livres: 15, poupanca: 15, quita: 25 }
       };
 
       const p = perfis[tipo];
@@ -295,11 +332,10 @@
       document.getElementById('percQuitacaoDividas').value = p.quita;
 
       atualizarTotal();
-      showToast(`✓ Perfil "${tipo}" aplicado!`, 'success');
+      alert(`✓ Perfil "${tipo}" aplicado!`);
     }
     window.aplicarPerfil = aplicarPerfil;
 
-    // Salvar perfil
     document.getElementById('formPerfil').addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -310,7 +346,7 @@
       const total = essenciais + livres + poupanca + quita;
 
       if (total !== 100) {
-        showToast('⚠️ A soma dos percentuais deve ser exatamente 100%', 'error');
+        alert('⚠️ A soma dos percentuais deve ser exatamente 100%');
         return;
       }
 
@@ -324,14 +360,11 @@
       };
 
       localStorage.setItem(PERFIL_KEY, JSON.stringify(perfil));
-      showToast('✓ Perfil financeiro salvo!', 'success');
-
+      alert('✓ Perfil financeiro salvo!');
       setTimeout(() => window.location.href = 'dashboard.html', 900);
     });
 
-    // -------------------------
     // GERENCIADOR DE CATEGORIAS
-    // -------------------------
     const catGrupo = document.getElementById('catGrupo');
     const catLista = document.getElementById('catLista');
 
@@ -363,8 +396,6 @@
         const idx = Number(inp.dataset.idx);
         if (items[idx]) items[idx].label = (inp.value || '').trim() || items[idx].originalLabel;
       });
-
-      // fallback: garantir pelo menos 1 ativo
       if (!items.some(i => i.active)) {
         items[0].active = true;
       }
@@ -377,20 +408,17 @@
     document.getElementById('btnSalvarCats').addEventListener('click', () => {
       const kind = catGrupo.value;
       ERP_CFG.setCategoryConfig(kind, collectCatList(kind));
-      showToast('✓ Categorias atualizadas!', 'success');
+      alert('✓ Categorias atualizadas!');
     });
 
     document.getElementById('btnResetCats').addEventListener('click', () => {
-      // reset: recria defaults e re-render
       localStorage.removeItem('gf_erp_cfg_categorias');
       ERP_CFG.ensureCategoriesConfig();
       renderCatList(catGrupo.value);
-      showToast('✓ Categorias restauradas ao padrão!', 'info');
+      alert('✓ Categorias restauradas ao padrão!');
     });
 
-    // -------------------------
     // GERENCIADOR DE BANCOS
-    // -------------------------
     const bankTipo = document.getElementById('bankTipo');
     const bankLista = document.getElementById('bankLista');
 
@@ -434,26 +462,16 @@
     document.getElementById('btnSalvarBanks').addEventListener('click', () => {
       const type = bankTipo.value;
       ERP_CFG.setBankConfig(type, collectBankList(type));
-      showToast('✓ Bancos atualizados!', 'success');
+      alert('✓ Bancos atualizados!');
     });
 
     document.getElementById('btnResetBanks').addEventListener('click', () => {
       localStorage.removeItem('gf_erp_cfg_bancos');
       ERP_CFG.ensureBanksConfig();
       renderBankList(bankTipo.value);
-      showToast('✓ Bancos restaurados ao padrão!', 'info');
+      alert('✓ Bancos restaurados ao padrão!');
     });
 
-    // Toast
-    function showToast(message, type = 'success') {
-      const toast = document.createElement('div');
-      toast.className = `toast toast--${type}`;
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm("Deseja realmente sair?")) {
         localStorage.setItem(LOGGED_KEY, "false");
